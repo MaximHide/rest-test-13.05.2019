@@ -1,41 +1,50 @@
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
+
 import io.restassured.response.ValidatableResponse;
 
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
-
-import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.*;
 
 
 public class WeatherTest {
 
 
+    @Before
+    public void url() {
+
+        RestAssured.baseURI = "https://pinformer.sinoptik.ua";
+
+    }
+
     @Test()
     public void getWeatherByCityTest() {
 
+        String cityName = "Kharkiv";
 
-        RestAssured.baseURI = "https://pinformer.sinoptik.ua/search.php";
+
+        basePath = "search.php";
         ValidatableResponse response = RestAssured.given()
                 .param("lang", "ua")
                 .param("return_id", 1)
-                .param("q", "Lviv")
+                .param("q", cityName)
+                .log().uri()
                 .get()
                 .then()
 //                .log().all()
                 .statusCode(200);
         String cityInfo = response.extract().asString();
 
-        System.out.println("Температура во Львове = " + getWeather(getCityId(cityInfo)));
+        System.out.println("Температура в " + cityName+ "= " + getWeather(getCityId(cityInfo)));
 
 
     }
 
 
     private String getCityId(String cityDate) {
-//        Response response = get("https://pinformer.sinoptik.ua/search.php?lang=ua&return_id=1&q=Lviv");
-//        System.out.println(response.asString());
+
         String response[] = cityDate.split("\\|");
         String cityId = response[response.length - 1];
 
@@ -43,15 +52,15 @@ public class WeatherTest {
 
     }
 
-    private String getWeather(String cityDate) {
+    private String getWeather(String cityId) {
 
 
-        RestAssured.baseURI = ("https://pinformer.sinoptik.ua/pinformer4.php");
-
+        basePath = "pinformer4.php";
         ValidatableResponse response = RestAssured.given()
                 .param("type", "js")
                 .param("lang", "ua")
-                .param("id", cityDate)
+                .param("id", cityId)
+                .log().uri()
                 .get()//.log().uri().get()
                 .then()
 //                        .log().all()
@@ -59,13 +68,10 @@ public class WeatherTest {
                 .statusCode(200);
 
 
-        Response resp = get("https://pinformer.sinoptik.ua/pinformer4.php?type=js&lang=ua&id=" + cityDate);
+        JSONObject jsonObject = new JSONObject(response.extract().asString());
 
-        JSONObject jsonObject = new JSONObject(resp.getBody().asString());
-        String temp = jsonObject.getString("{temp}");
-//        System.out.println("Температура во Львове = " + temp);
 
-        return temp;
+        return jsonObject.getString("{temp}");
     }
 
 }
