@@ -13,10 +13,10 @@ public class WeatherTest {
 
 
     @Test()
-    public void getCity() {
+    public void getWeatherByCityTest() {
 
 
-        RestAssured.baseURI = "https://pinformer.sinoptik.ua/search.php?";
+        RestAssured.baseURI = "https://pinformer.sinoptik.ua/search.php";
         ValidatableResponse response = RestAssured.given()
                 .param("lang", "ua")
                 .param("return_id", 1)
@@ -25,28 +25,28 @@ public class WeatherTest {
                 .then()
 //                .log().all()
                 .statusCode(200);
-        String cityId = response.extract().asString();
+        String cityInfo = response.extract().asString();
 
-        System.out.println("Температура во Львове = " + getWeather(getCityId(cityId)));
+        System.out.println("Температура во Львове = " + getWeather(getCityId(cityInfo)));
 
 
     }
 
 
     private String getCityId(String cityDate) {
-        Response response = get("https://pinformer.sinoptik.ua/search.php?lang=ua&return_id=1&q=Lviv");
-        System.out.println(response.asString());
-        String responseTest[] = response.asString().split("\\|");
-        String currentCityId = responseTest[responseTest.length - 1];
+//        Response response = get("https://pinformer.sinoptik.ua/search.php?lang=ua&return_id=1&q=Lviv");
+//        System.out.println(response.asString());
+        String response[] = cityDate.split("\\|");
+        String cityId = response[response.length - 1];
 
-        return currentCityId;
+        return cityId;
 
     }
 
     private String getWeather(String cityDate) {
 
 
-        RestAssured.baseURI = ("https://pinformer.sinoptik.ua/pinformer4.php?");
+        RestAssured.baseURI = ("https://pinformer.sinoptik.ua/pinformer4.php");
 
         ValidatableResponse response = RestAssured.given()
                 .param("type", "js")
