@@ -1,15 +1,10 @@
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
-import io.restassured.specification.RequestSpecification;
-import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
 
 public class PetStoreTest {
 
-    public int petId = 777;
+    private int petId = 777;
 
     static {
         RestAssured.baseURI = Config.BASE_URI;
