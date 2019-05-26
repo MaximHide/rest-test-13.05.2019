@@ -3,7 +3,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 
 import org.json.JSONObject;
-import org.junit.Before;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
@@ -12,14 +13,14 @@ import static io.restassured.RestAssured.*;
 public class WeatherTest {
 
 
-    @Before
+    @BeforeClass
     public void url() {
 
         RestAssured.baseURI = "https://pinformer.sinoptik.ua";
 
     }
 
-    @Test()
+    @Test
     public void getWeatherByCityTest() {
 
         String cityName = "Kharkiv";
