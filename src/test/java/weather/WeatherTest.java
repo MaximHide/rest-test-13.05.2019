@@ -1,3 +1,5 @@
+package weather;
+
 import io.restassured.RestAssured;
 
 import io.restassured.response.ValidatableResponse;
@@ -6,6 +8,8 @@ import org.json.JSONObject;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.lang.reflect.Array;
 
 import static io.restassured.RestAssured.*;
 
@@ -70,7 +74,6 @@ public class WeatherTest {
 
 
         JSONObject jsonObject = new JSONObject(response.extract().asString());
-
 
         return jsonObject.getString("{temp}");
     }
