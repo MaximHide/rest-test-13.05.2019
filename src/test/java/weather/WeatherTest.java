@@ -42,6 +42,7 @@ public class WeatherTest {
                 .statusCode(200);
         String cityInfo = response.extract().asString();
 
+
         System.out.println("Температура в " + cityName+ "= " + getWeather(getCityId(cityInfo)));
 
 
