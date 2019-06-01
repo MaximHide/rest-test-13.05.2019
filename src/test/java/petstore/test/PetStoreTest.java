@@ -8,19 +8,27 @@ import petstore.models.CategoryModel;
 import petstore.models.PetModel;
 import petstore.models.TegModel;
 
+import java.util.Random;
+
 import static org.hamcrest.Matchers.is;
 import static petstore.endpoint.PetEndpoint.*;
 
 
 public class PetStoreTest {
 
-    private int petId = 777;
+    private int petId = 0 ;
+
+
+
     private PetEndpoint petEndpoint = new PetEndpoint();
 
     @Test
     public void getPetById() {
-
-        petEndpoint.getPetById(petId).log().all();
+        if (petId > 0) {
+            System.out.println(petId);
+            petEndpoint.getPetById(petId).log().all();
+        }
+        petEndpoint.getPetById(getRandomPetId()).log().all();
     }
 
     @Test
@@ -82,6 +90,19 @@ public class PetStoreTest {
         petEndpoint.deletePet(petId).log();
 
     }
+//
+    public int getRandomPetId(){
+        Random random = new Random();
+        int randomPetId = random.nextInt(100);
 
+        return randomPetId;
+    }
 
+    public int getPetId() {
+        return petId;
+    }
+
+    public void setPetId(int petId) {
+        this.petId = petId;
+    }
 }
