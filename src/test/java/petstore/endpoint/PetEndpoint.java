@@ -3,12 +3,20 @@ package petstore.endpoint;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import net.serenitybdd.rest.SerenityRest;
+import net.thucydides.core.annotations.Step;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import petstore.endpoint.Config;
 import petstore.models.PetModel;
+//
+//import java.util.logging.Logger;
 
 
 public class PetEndpoint {
 
+    //    Logger logger = Logger.getLogger(this.getClass().getName());
+    Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     public enum Status {
         AVAILABLE,
@@ -17,19 +25,22 @@ public class PetEndpoint {
     }
 
     private RequestSpecification given() {
-        return RestAssured.given()
+        SerenityRest.enableLoggingOfRequestAndResponseIfValidationFails();
+        return SerenityRest.given()
                 .baseUri(Config.BASE_URI)
-                .contentType("application/json")
-                .log().uri();
+                .contentType("application/json");
+//                .log().uri();
     }
 
     public ValidatableResponse getPetById(int id) {
+        log.info("++++++++++++++++++++++++++++getPetById");
         return given()
                 .get(Config.GET_PET_BY_ID, id)
                 .then()
                 .statusCode(200);
     }
 
+    @Step
     public ValidatableResponse createNewPet(PetModel petModel) {
 
         return given()
@@ -41,6 +52,7 @@ public class PetEndpoint {
 
     }
 
+    @Step
     public ValidatableResponse deletePet(int petId) {
 
         return given()
@@ -62,6 +74,7 @@ public class PetEndpoint {
                 .statusCode(200);
     }
 
+    @Step
     public ValidatableResponse getPetByStatus(Status status) {
 
         return given()

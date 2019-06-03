@@ -1,10 +1,13 @@
 package petstore.test;
 
 import org.junit.*;
+import org.junit.runner.RunWith;
 import petstore.endpoint.ShopEndpoint;
 import petstore.models.ShopModel;
 
 import java.util.Random;
+
+import static org.hamcrest.core.Is.is;
 
 public class ShopTest {
 
@@ -12,53 +15,60 @@ public class ShopTest {
     private Random random = new Random();
     private int petId;
     private ShopEndpoint shopEndpoint = new ShopEndpoint();
-    private int randomOrderId ;
+    private int randomOrderId;
     private PetStoreTest petStoreTest = new PetStoreTest();
 
 
     @Before
-    public void findPet() {
-
-        this.petId = random.nextInt(100);
+//    @Test
+    public  void findPetTest() {
+        System.out.println("findPet :");
+        this.petId = random.nextInt(1000)+100;
         this.randomOrderId = random.nextInt(10);
-        System.out.println("pet id = " + petId +" " +"order id = " +  randomOrderId);
-
         petStoreTest.setPetId(petId);
-        if (shopEndpoint.getStatusCodeByPetId(petId) == false) {
 
-            petStoreTest.createNewPetTest();// Just for create new pet if his is not found
+       if ( shopEndpoint.getStatusCodeByPetId(petId) == false) {
 
-        }
-
-
+           petStoreTest.createNewPetTest();
+       }
     }
 
     @Test
-    public void createOrder() {
+    public void createOrderTest() {
 
-        System.out.println("pet id = " + petId +" " +"order id = " +  randomOrderId);
         ShopModel shopModel = new ShopModel(
                 randomOrderId,
                 petId,
                 1,
-                "2019-05-31T16:59:07.189Z",
+//                "2019-05-31T16:59:07.189Z",
                 "sell",
                 false
         );
 
-        shopEndpoint.createOrder(shopModel).log().all();
-        System.out.println("xz");
+        System.out.println(shopModel.getQuantity() + "  " + shopModel.getStatus()) ;
+
+        shopEndpoint.createOrder(shopModel);//.log().all();
+
     }
 
     @Test
     public void getOrderByIdTest() {
 
-        shopEndpoint.getOrderById(randomOrderId).log().all();
+        ShopModel shopModel = new ShopModel();
+
+        shopEndpoint.getOrderById(randomOrderId)
+                .body("id",is(randomOrderId))
+                .body("petId",is(petId))
+                .body("quantity",is(shopModel.getQuantity()))
+//                .body("date", is ("2019-05-31T16:59:07.189Z"))
+                .body("status",is(shopModel.getStatus()))
+                .body("complete",is(false));
     }
 
-        @After
-    public void deleteOrderByOrderIdTest() {
-            System.out.println("pet id = " + petId +" " +"order id = " +  randomOrderId);
-        shopEndpoint.deleteOrderById(randomOrderId).log().all();
+    @After
+//  @Test
+   public void deleteOrderByOrderIdTest() {
+
+        shopEndpoint.deleteOrderById(randomOrderId);//.log().all();
     }
 }

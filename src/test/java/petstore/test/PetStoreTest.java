@@ -1,7 +1,10 @@
 package petstore.test;
 
 import io.restassured.RestAssured;
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import petstore.endpoint.Config;
 import petstore.endpoint.PetEndpoint;
 import petstore.models.CategoryModel;
@@ -13,13 +16,13 @@ import java.util.Random;
 import static org.hamcrest.Matchers.is;
 import static petstore.endpoint.PetEndpoint.*;
 
-
+@RunWith(SerenityRunner.class)
 public class PetStoreTest {
 
-    private int petId = 0 ;
+    private int petId = 0;
 
 
-
+    @Steps
     private PetEndpoint petEndpoint = new PetEndpoint();
 
     @Test
@@ -43,7 +46,7 @@ public class PetStoreTest {
                 "AVAILABLE"
         );
 
-        petEndpoint.createNewPet(petModel).log().all();
+        petEndpoint.createNewPet(petModel);//.log().all();
 
     }
 
@@ -90,8 +93,9 @@ public class PetStoreTest {
         petEndpoint.deletePet(petId).log();
 
     }
-//
-    public int getRandomPetId(){
+
+    //
+    public int getRandomPetId() {
         Random random = new Random();
         int randomPetId = random.nextInt(100);
 

@@ -31,6 +31,7 @@ public class ShopModel {
         this.status = status;
         this.complete = complete;
     }
+    public ShopModel() {}
 
 
 }

@@ -4,25 +4,27 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import net.serenitybdd.rest.SerenityRest;
+import net.thucydides.core.annotations.Step;
 import petstore.models.ShopModel;
 
 
 public class ShopEndpoint {
 
     private RequestSpecification given() {
-        return RestAssured.given()
+        return SerenityRest.given()
                 .baseUri(Config.BASE_SHOP_URL)
                 .contentType("application/json")
-                .log().uri();
+                ;//.log().uri();
     }
 
-
+@Step
     public ValidatableResponse getOrderById(int orderId) {
 
         return given()
                 .get(Config.CREATE_ORDER + orderId)
                 .then()
-                .statusCode(200).log().all();
+                .statusCode(200);//.log().all();
     }
 
     public boolean getStatusCodeByPetId(int petId) {
@@ -38,7 +40,7 @@ public class ShopEndpoint {
 
     }
 
-
+@Step
     public ValidatableResponse createOrder(ShopModel shopModel) {
 
         return given()
@@ -47,7 +49,7 @@ public class ShopEndpoint {
                 .then()
                 .statusCode(200);
     }
-
+@Step
     public ValidatableResponse deleteOrderById(int orderId) {
 
         return given()
