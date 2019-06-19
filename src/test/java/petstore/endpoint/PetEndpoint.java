@@ -40,7 +40,7 @@ public class PetEndpoint {
                 .statusCode(200);
     }
 
-    @Step
+//    @Step
     public ValidatableResponse createNewPet(PetModel petModel) {
 
         return given()
@@ -49,6 +49,18 @@ public class PetEndpoint {
                 .post(Config.CREATE_PET)
                 .then()
                 .statusCode(200);
+
+    }
+
+//    @Step
+    public ValidatableResponse createNewPet(PetModel petModel,int code) {
+
+        return given()
+
+                .body(petModel)
+                .post(Config.CREATE_PET)
+                .then()
+                .statusCode(code);
 
     }
 

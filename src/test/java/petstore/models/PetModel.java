@@ -14,31 +14,6 @@ public class PetModel {
 
 
 
-
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public CategoryModel getCategory() {
-//        return category;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public String[] getPhotoUrls() {
-//        return photoUrls;
-//    }
-//
-//    public TegModel[] getTags() {
-//        return tags;
-//    }
-//
-//    public String getStatus() {
-//        return status;
-//    }
-
     public PetModel(int id , String name, CategoryModel category, String[] photoUrls, TegModel[] tags, String status) {
 
         this.id = id;
@@ -55,7 +30,15 @@ public class PetModel {
         this.name = name;
             }
 
-public PetModel (){}
+    public PetModel( String name,CategoryModel category, String[] photoUrls, TegModel[] tags, String status) {
+        this.category = category;
+        this.name = name;
+        this.photoUrls = photoUrls;
+        this.tags = tags;
+        this.status = status;
+    }
+
+    public PetModel (){}
 
 
 

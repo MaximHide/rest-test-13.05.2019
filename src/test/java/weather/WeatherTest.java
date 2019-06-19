@@ -4,34 +4,38 @@ import io.restassured.RestAssured;
 
 import io.restassured.response.ValidatableResponse;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.serenitybdd.rest.SerenityRest;
+import net.thucydides.core.annotations.Step;
+import net.thucydides.core.annotations.Steps;
 import org.json.JSONObject;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.theories.suppliers.TestedOn;
+import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 
 import static io.restassured.RestAssured.*;
 
-
+@RunWith(SerenityRunner.class)
 public class WeatherTest {
 
-
     @BeforeClass
-    public void url() {
+     public void url() {
 
         RestAssured.baseURI = "https://pinformer.sinoptik.ua";
 
     }
 
     @Test
-    public void getWeatherByCityTest() {
+       public void getWeatherByCityTest() {
 
         String cityName = "Kharkiv";
 
 
         basePath = "search.php";
-        ValidatableResponse response = RestAssured.given()
+        ValidatableResponse response = SerenityRest.given()
                 .param("lang", "ua")
                 .param("return_id", 1)
                 .param("q", cityName)
@@ -62,7 +66,7 @@ public class WeatherTest {
 
 
         basePath = "pinformer4.php";
-        ValidatableResponse response = RestAssured.given()
+        ValidatableResponse response = SerenityRest.given()
                 .param("type", "js")
                 .param("lang", "ua")
                 .param("id", cityId)

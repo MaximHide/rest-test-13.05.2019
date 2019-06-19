@@ -11,6 +11,8 @@ public class Config {
     final static String CREATE_ORDER = "order/";
     final static String FIND_PET = "http://petstore.swagger.io/v2/pet/";
 
+    final static String UPLOAD_PHOTO = BASE_URI + "pet/{petId}/uploadImage";
+
 
 
 }
