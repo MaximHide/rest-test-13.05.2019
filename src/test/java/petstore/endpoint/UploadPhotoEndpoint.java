@@ -6,6 +6,8 @@ import net.serenitybdd.rest.SerenityRest;
 
 import java.io.File;
 
+import static org.hamcrest.CoreMatchers.is;
+
 public class UploadPhotoEndpoint {
 
 
@@ -18,13 +20,37 @@ public class UploadPhotoEndpoint {
     }
 
 
-    public ValidatableResponse uploadPhoto(int petId, String fileName) {
+    public ValidatableResponse uploadPhoto(int petId, String fileName, String metadata) {
+
         File file = new File("./" + fileName);
+
+        String checkMessage = "additionalMetadata: " + metadata + "\n" +
+                "File uploaded to ./" + fileName + ", " + getSizeFile(fileName) + " bytes";
 
         return given()
                 .multiPart(file)
+                .multiPart("additionalMetadata", metadata)
                 .post(Config.UPLOAD_PHOTO, petId)
                 .then().log().all()
+                .body("message", is(checkMessage))
+                .statusCode(200);
+//                .log().all();
+
+    }
+
+    public ValidatableResponse uploadPhoto(int petId, String fileName) {
+
+        File file = new File("./" + fileName);
+        String checkMessage = "additionalMetadata: null" + "\n" +
+                "File uploaded to ./" + fileName + ", " + getSizeFile(fileName) + " bytes";
+
+
+        return given()
+                .multiPart(file)
+                .multiPart("additionalMetadata", "null")
+                .post(Config.UPLOAD_PHOTO, petId)
+                .then().log().all()
+                .body("message", is(checkMessage))
                 .statusCode(200);
 //                .log().all();
 
