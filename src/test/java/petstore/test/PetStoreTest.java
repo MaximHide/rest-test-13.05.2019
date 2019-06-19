@@ -1,108 +1,53 @@
 package petstore.test;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import io.restassured.RestAssured;
-
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Steps;
+import net.thucydides.junit.annotations.Concurrent;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import petstore.endpoint.Config;
+import org.junit.runners.MethodSorters;
 import petstore.endpoint.PetEndpoint;
 import petstore.models.CategoryModel;
 import petstore.models.PetModel;
 import petstore.models.TegModel;
 
-import java.util.Random;
-
 import static org.hamcrest.Matchers.is;
-import static petstore.endpoint.PetEndpoint.*;
+import static petstore.endpoint.PetEndpoint.Status;
 
-//@RunWith(SerenityRunner.class)
-@RunWith(DataProviderRunner.class)
+@RunWith(SerenityRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Concurrent
 public class PetStoreTest {
 
-    private int petId = 0;
+    private int petId = 777;
 
+    private PetModel petModel;
 
-    //    @Steps
+    @Before
+    public void setUp() {
+
+        petModel = new PetModel(
+                petId,
+                "new name pet",
+                new CategoryModel(),
+                new String[]{},
+                new TegModel[]{new TegModel()},
+                "PENDING"
+        );
+
+    }
+
+    @Steps
     private PetEndpoint petEndpoint = new PetEndpoint();
 
-//@DataProvider
-//    public static PetModel getDateProviderCreate(){
-//        return new PetModel({
-//            {1,"s",new CategoryModel(),new String[]{"asdsd"},new TegModel[]{new TegModel()},"sdasd"}
-//        };)
-//}
-
-    @DataProvider
-    public static Object[][] getDateProviderCreatePet() {
-        return new Object[][]{
-
-                {new PetModel(1,"s",new CategoryModel(),new String[]{"asdsd"},new TegModel[]{new TegModel()},"sdasd"),200}
-              //                {111, "somename", 400},
-//                {0, "\"\"", 400}
-
-        };
-
-    }
-
-//    @DataProvider
-//    public static PetModel testPet() {
-//
-//        return new PetModel(
-//                {
-//
-//                }
-//        );
-//    }
-
-    /**
-     * PetModel petModel = new PetModel(
-     * petId,
-     * "name",
-     * new CategoryModel(),
-     * new String[]{"www.zoo.com"},
-     * new TegModel[]{new TegModel()},
-     * "AVAILABLE"
-     * );
-     */
-
-
-//        }
     @Test
-    @UseDataProvider("getDateProviderCreatePet")
-    public void createPetTest(PetModel petModel1,int code) {
-       // PetModel petModel = new PetModel(petModel1);
-//        PetModel petModel = new PetModel(
-//                id,
-//                name,
-//                new CategoryModel(),
-//                new String[]{"www.zoo.com"},
-//                new TegModel[]{new TegModel()},
-//                "AVAILABLE"
-//        );
+    public void test1_createNewPetTest() {
 
-        petEndpoint.createNewPet(petModel1, code);
-
-    }
-
-
-    @Test
-    public void getPetById() {
-        if (petId > 0) {
-            System.out.println(petId);
-            petEndpoint.getPetById(petId).log().all();
-        }
-        petEndpoint.getPetById(getRandomPetId()).log().all();
-    }
-
-    @Test
-    public void createNewPetTest() {
-
-        PetModel petModel = new PetModel(
+        petModel = new PetModel(
                 petId,
-                "name",
+                "test pet",
                 new CategoryModel(),
                 new String[]{"www.zoo.com"},
                 new TegModel[]{new TegModel()},
@@ -115,30 +60,28 @@ public class PetStoreTest {
 
 
     @Test
-    public void editPetTest() {
+    public void test2_getPetById() {
 
-        PetModel petModel = new PetModel(
-                petId,
-                "new name for pet",
-                new CategoryModel(),
-                new String[]{},
-                new TegModel[]{new TegModel()},
-                "AVAILABLE"
-        );
+        petEndpoint.getPetById(petId).log().all();
+
+    }
+
+
+    @Test
+    public void test3_editPetTest() {
 
         petEndpoint.editPet(petModel).log().all();
+
     }
 
     @Test
-    public void checkEditPetTest() {
+    public void test4_checkEditPetTest() {
 
-        RestAssured.given()
-                .get(Config.GET_PET_BY_ID, petId)
-                .then()
-                .assertThat()
-                .statusCode(200)
+        petEndpoint.getPetById(petId)
                 .body("id", is(petId))
-                .body("name", is("new name for pet"));
+                .body("name", is(petModel.getName()))
+                .body("status", is(petModel.getStatus()));
+
 
     }
 
@@ -151,19 +94,23 @@ public class PetStoreTest {
     }
 
     @Test
-    public void deletePetTest() {
+    public void test5_deletePetTest() {
 
         petEndpoint.deletePet(petId).log();
 
     }
 
-    //
-    public int getRandomPetId() {
-        Random random = new Random();
-        int randomPetId = random.nextInt(100);
+//    public void getRandomPetId() {
+//        Random random = new Random();
+//        this.randomPetId = random.nextInt(100);
+//    }
 
-        return randomPetId;
-    }
+//    public int getRandomPetId() {
+//        Random random = new Random();
+//        int randomPetId = random.nextInt(100);
+//
+//        return this.randomPetId = randomPetId;
+//    }
 
     public int getPetId() {
         return petId;

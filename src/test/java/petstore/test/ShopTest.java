@@ -1,74 +1,63 @@
 package petstore.test;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.junit.annotations.Concurrent;
 import org.junit.*;
+
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import petstore.endpoint.ShopEndpoint;
 import petstore.models.ShopModel;
 
-import java.util.Random;
+
 
 import static org.hamcrest.core.Is.is;
-
+@RunWith(SerenityRunner.class)
+@Concurrent
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ShopTest {
 
-
-    private Random random = new Random();
-    private int petId;
     private ShopEndpoint shopEndpoint = new ShopEndpoint();
-    private int randomOrderId;
-    private PetStoreTest petStoreTest = new PetStoreTest();
 
+    private ShopModel shopModel;
 
     @Before
-//    @Test
-    public  void findPetTest() {
-        System.out.println("findPet :");
-        this.petId = random.nextInt(1000)+100;
-        this.randomOrderId = random.nextInt(10);
-        petStoreTest.setPetId(petId);
-
-       if ( shopEndpoint.getStatusCodeByPetId(petId) == false) {
-
-           petStoreTest.createNewPetTest();
-       }
-    }
-
-    @Test
-    public void createOrderTest() {
-
-        ShopModel shopModel = new ShopModel(
-                randomOrderId,
-                petId,
+    public void setUp(){
+        shopModel = new ShopModel(
+                9,
+                777,
                 1,
 //                "2019-05-31T16:59:07.189Z",
                 "sell",
-                false
+                true
         );
+    }
 
-        System.out.println(shopModel.getQuantity() + "  " + shopModel.getStatus()) ;
+    @Test
+    public void test1_createOrderTest() {
 
         shopEndpoint.createOrder(shopModel);//.log().all();
 
     }
 
     @Test
-    public void getOrderByIdTest() {
+    public void test2_getOrderByIdTest() {
 
-        ShopModel shopModel = new ShopModel();
 
-        shopEndpoint.getOrderById(randomOrderId)
-                .body("id",is(randomOrderId))
-                .body("petId",is(petId))
+
+        shopEndpoint.getOrderById(shopModel.getId())
+                .body("id",is(shopModel.getId()))
+                .body("petId",is(shopModel.getPetId()))
                 .body("quantity",is(shopModel.getQuantity()))
-//                .body("date", is ("2019-05-31T16:59:07.189Z"))
+//                .body("date", is (shopModel.getDate()))
                 .body("status",is(shopModel.getStatus()))
                 .body("complete",is(false));
     }
 
-    @After
-//  @Test
-   public void deleteOrderByOrderIdTest() {
 
-        shopEndpoint.deleteOrderById(randomOrderId);//.log().all();
+  @Test
+   public void test3_deleteOrderByOrderIdTest() {
+
+        shopEndpoint.deleteOrderById(shopModel.getId());//.log().all();
     }
 }

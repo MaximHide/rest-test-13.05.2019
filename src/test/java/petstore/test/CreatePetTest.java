@@ -15,12 +15,12 @@ import petstore.models.TegModel;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Concurrent
+@Concurrent(threads = "4")
 @RunWith(SerenityParameterizedRunner.class)
 public class CreatePetTest {
 
 
-    @Steps //вычитываем степы
+    @Steps
     private PetEndpoint petEndpoint = new PetEndpoint();
 
     @TestData
@@ -28,22 +28,15 @@ public class CreatePetTest {
         return Arrays.asList(new Object[][]{
                 {"zverushka", 200},
                 {"zverenysh", 200},
-                {"zverushka", 200},
-                {"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},
-                {"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200},{"zverushka", 200},{"zverushka", 200},{"zverushka", 200},
-                {"zverushka", 200}
-
-
+                {"zverenysh", 200},
+                {"zverenysh", 200},
+                {"zverenysh", 200},
+                {"zverenysh", 200},
+                {"zverenysh", 200},
+                {"zverenysh", 200},
+                {"zverenysh", 200},
+                {"zverenysh", 200},
+                {"zverenysh", 200}
         });
     }
 

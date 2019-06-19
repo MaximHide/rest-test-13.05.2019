@@ -30,6 +30,12 @@ public class PetModel {
         this.name = name;
             }
 
+    public PetModel (String name, String status) {
+
+        this.name = name;
+        this.status = status;
+    }
+
     public PetModel( String name,CategoryModel category, String[] photoUrls, TegModel[] tags, String status) {
         this.category = category;
         this.name = name;

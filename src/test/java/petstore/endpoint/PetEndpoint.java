@@ -40,6 +40,15 @@ public class PetEndpoint {
                 .statusCode(200);
     }
 
+    public boolean getPetById(int id, int statusCode) {
+        log.info("++++++++++++++++++++++++++++getPetById");
+         given()
+                .get(Config.GET_PET_BY_ID, id)
+                .then()
+                .statusCode(statusCode);
+         return true;
+    }
+
 //    @Step
     public ValidatableResponse createNewPet(PetModel petModel) {
 
