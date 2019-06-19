@@ -56,7 +56,7 @@ public class UploadPhotoEndpoint {
 
     }
 
-    public long getSizeFile(String fileName) {
+    private long getSizeFile(String fileName) {
 
         return new File("./" + fileName).length();
     }
